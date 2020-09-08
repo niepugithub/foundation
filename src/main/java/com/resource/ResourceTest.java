@@ -3,7 +3,14 @@ package com.resource;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONReader;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -121,6 +129,36 @@ public class ResourceTest {
             String className = pgkName + "." + file.getName().substring(0, file.getName().length() - 6);
             classes.add(this.getClass().getClassLoader().loadClass(className));
         }
+    }
+
+    // xml文件解析
+    @Test
+    public void xmlParse1() throws ParserConfigurationException, IOException, SAXException {
+        String uri = this.getClass().getClassLoader().getResource("").getPath();
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(uri + "xml/books.xml");
+        NodeList books = document.getElementsByTagName("book");
+        List<Book> bookList = new LinkedList<>();
+        for (int index = 0; index < books.getLength(); index++) {
+            Node node = books.item(index);
+            Book book = new Book();
+            // 这里获取到node节点，得到id
+            NamedNodeMap attributes = node.getAttributes();
+            book.setId(Integer.parseInt(attributes.getNamedItem("id").getTextContent()));
+
+            NodeList childNodes = node.getChildNodes();
+
+            ArrayList<String> contents = new ArrayList<>();
+            for (int j = 1; j < childNodes.getLength(); j += 2) {
+                String textContent = childNodes.item(j).getTextContent();
+                contents.add(textContent);
+            }
+            book.setName(contents.get(0));
+            book.setAuthor(contents.get(1));
+            book.setYear(Integer.parseInt(contents.get(2)));
+            book.setPrice(Double.parseDouble(contents.get(3)));
+            bookList.add(book);
+        }
+        System.out.println(bookList);
     }
 
 
