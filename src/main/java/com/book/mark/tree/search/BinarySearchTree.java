@@ -3,6 +3,8 @@ package com.book.mark.tree.search;
 import com.book.mark.tree.BinaryNode;
 
 import java.util.ArrayDeque;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 
@@ -167,6 +169,26 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
     }
 
     /**
+     * 获取树的高度
+     *
+     * @return
+     */
+    public int hight() {
+        if (isEmpty()) {
+            return 0;
+        }
+        return hight(root);
+    }
+
+    private int hight(BinaryNode<T> root) {
+        if (root == null) {
+            return 0;
+        }
+        // max(左子树的深度,右子树的深度)+1
+        return Math.max(hight(root.getLeft()), hight(root.getRight())) + 1;
+    }
+
+    /**
      * 先序遍历看不懂，就算了；这里想办法实现层序遍历
      */
     @Override
@@ -203,4 +225,68 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
         return sb.toString();
     }
 
+    public String printLevel() {
+        if (isEmpty()) {
+            return null;
+        }
+        List<StringBuilder> list = new LinkedList<>();
+        Queue<BinaryNode> queue = new ArrayDeque<>();
+        StringBuilder level = new StringBuilder();
+        queue.add(root);
+        BinaryNode<T> last = root;
+        BinaryNode<T> nlast = null;
+        int hight = 0;
+        while (queue.peek() != null && hight < hight()) {
+            BinaryNode<T> current = queue.poll();
+            if (current.getElement() != null) {
+                level.append(current.getElement().toString());
+            } else {
+                level.append("*");
+            }
+            level.append("\t\t");
+            if (current.getLeft() != null) {
+                queue.add(current.getLeft());
+                nlast = current.getLeft();
+            } else {
+                // 空节点占位
+                queue.add(nlast = new BinaryNode<>());
+            }
+            if (current.getRight() != null) {
+                queue.add(current.getRight());
+                nlast = current.getRight();
+            } else {
+                // 空节点占位
+                queue.add(nlast = new BinaryNode<>());
+            }
+
+            if (last == current) {
+                System.out.println(level.toString());
+                list.add(level);
+                level = new StringBuilder();
+                last = nlast;
+                hight++;
+            }
+        }
+        StringBuilder result = new StringBuilder();
+        // 处理list
+        int count = 0;
+        for (int i = 0; i < list.size(); i++) {
+            count = list.size() - i;
+            for (int j = 0; j < count; j++) {
+                result.append("\t");
+            }
+            result.append(list.get(i) + "\n");
+        }
+        return result.toString();
+    }
+
+    // 找到每行的第一个非*的位置，再加1就是移动的位数
+    private int findDigit(StringBuilder s) {
+        for (int i = 0; i < s.length(); i++) {
+            if (!"*".equals(String.valueOf(s.charAt(i))) && !"\t".equals(String.valueOf(s.charAt(i)))) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

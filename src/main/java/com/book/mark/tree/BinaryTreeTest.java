@@ -29,10 +29,14 @@ public class BinaryTreeTest {
         System.out.println();
         tree.printRMLTree();
         System.out.println();
-        System.out.println(tree.findMax());
-        System.out.println(tree.findMin());
+        System.out.println("树的最大值=====" + tree.findMax());
+        System.out.println("树的最小值=====" + tree.findMin());
+        System.out.println("树的高度=====" + tree.hight());
         System.out.println("层序遍历--------------------------------");
-        System.out.println(tree);
+        String s = tree.printLevel();
+        System.out.println("树结构------------------------------------");
+        System.out.println(s);
+
     }
 
     @Test
