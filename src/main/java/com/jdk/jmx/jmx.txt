@@ -1,0 +1,37 @@
+
+粗略学习下jmx相关内容：主要的参考文章https://blog.csdn.net/weixin_33850015/article/details/85605699
+
+https://www.cnblogs.com/xzh31390080/articles/2231213.html
+
+什么是jmx: java management extensions - java管理扩展
+
+是一个应用程序，设备，系统等植入管理功能的框架
+
+跨系统操作平台，跨系统体系结构，跨网络传输协议实现系统管理，网络管理，服务管理
+
+jmx体系结构
+（1）设备层
+（2）代理层
+（3）分布式服务层
+（4）附加管理协议API
+
+jmx重要概念
+（1）MBean
+（2）MBean Server
+（3）JMX Agent
+（4）ProtocolAdapters and Connectors
+
+
+jmx使用
+（1）需要的jar文件：jmxri.jar/jmxtools.jar/jmxremote.jar/jmxremote_optional.jar/rmissl.jar
+（2）创建接口：XXXMBean
+（3）创建类：XXX implements XXXXMBean
+（4）创建Agent类，获得MBeanServer，注册Adapter，注册MBean，启动Agent
+
+
+https://www.cnblogs.com/zjstar12/archive/2012/06/10/2544387.html
+讲解了jmx的一些常见使用
+
+动手完成MxBean
+JMX学习笔记(三)：MXBean
+https://blog.csdn.net/java_huashan/article/details/34100543
